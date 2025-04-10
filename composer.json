@@ -39,6 +39,9 @@
     ],
     "analyse": [
       "@php vendor/bin/phpstan analyse --memory-limit=2G --verbose --ansi"
+    ],
+    "dev": [
+      "@php -S localhost:8000 -t public"
     ]
   }
 }
