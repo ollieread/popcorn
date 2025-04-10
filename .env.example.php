@@ -11,7 +11,7 @@
 
 return [
     // The application environment
-    'app_env' => 'local',
+    'APP_ENV' => 'local',
     // Whether debug mode is enabled
-    'debug'   => true,
+    'DEBUG'   => true,
 ];
