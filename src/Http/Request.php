@@ -12,12 +12,28 @@ final class Request implements Contracts\Request
 
     private string $uri;
 
+    /**
+     * @var array<string|int, scalar|array<string|int, scalar>>
+     */
     private array $query;
 
+    /**
+     * @var array<string, string|list<string>>
+     */
     private array $headers;
 
+    /**
+     * @var array<string, scalar>
+     */
     private array $cookies;
 
+    /**
+     * @param \Popcorn\Http\RequestMethod                         $method
+     * @param string                                              $uri
+     * @param array<string|int, scalar|array<string|int, scalar>> $query
+     * @param array<string, string|list<string>>                  $headers
+     * @param array<string, scalar>                               $cookies
+     */
     public function __construct(
         RequestMethod $method,
         string        $uri,

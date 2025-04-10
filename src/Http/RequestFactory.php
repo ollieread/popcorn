@@ -97,6 +97,9 @@ final class RequestFactory
         return [];
     }
 
+    /**
+     * @return array<string, string|list<string>>
+     */
     private function getHeaders(): array
     {
         $headers = [];
@@ -106,6 +109,10 @@ final class RequestFactory
                 return str_starts_with($key, 'HTTP_') || str_starts_with($key, 'CONTENT_');
             }, ARRAY_FILTER_USE_KEY);
 
+            /**
+             * @var string $header
+             * @var string $value
+             */
             foreach ($rawHeaders as $header => $value) {
                 $headers[ucwords(strtolower(str_replace(['HTTP_', '_'], ['', '-'], $header)), '-')] = $value;
             }
@@ -114,12 +121,15 @@ final class RequestFactory
         return $headers;
     }
 
+    /**
+     * @return array<string, scalar>
+     */
     private function getCookies(): array
     {
         $cookies = [];
 
         if ($this->useGlobals) {
-            /** @var array<string|int, scalar|array<string|int, scalar>> $_COOKIE */
+            /** @var array<string, scalar> $_COOKIE */
             $cookies = $_COOKIE;
         }
 

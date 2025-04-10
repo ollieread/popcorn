@@ -5,7 +5,7 @@ namespace Popcorn\Http;
 
 final class HttpKernel
 {
-    private Contracts\Request $request;
+    private(set) Contracts\Request $request;
 
     public function setRequest(Contracts\Request $request): self
     {
