@@ -13,15 +13,18 @@
   "license"     : "MIT",
   "autoload"    : {
     "psr-4": {
-      "App\\"    : "app/",
       "Popcorn\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests/"
-    }
+    },
+    "files": [
+    ]
   },
+  "bin"         : [
+  ],
   "authors"     : [
     {
       "name" : "Ollie Read",
@@ -40,7 +43,7 @@
     "analyse": [
       "@php vendor/bin/phpstan analyse --memory-limit=2G --verbose --ansi"
     ],
-    "dev": [
+    "dev"    : [
       "@php -S localhost:8000 -t public"
     ]
   }
