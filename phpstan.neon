@@ -4,6 +4,7 @@ parameters:
   level: max
 
   paths:
-    - src
+    - app/app
+    - framework/src
 
   ignoreErrors:

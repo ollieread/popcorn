@@ -1,5 +1,5 @@
 {
-  "name"        : "ollieread/popcorn",
+  "name"        : "ollieread/popcorn-framework",
   "description" : "A macro-framework for PHP — a \"just-enough\" framework that gives you structure, clarity, and flexibility without the bloat.",
   "type"        : "project",
   "require"     : {
@@ -14,16 +14,12 @@
   "license"     : "MIT",
   "autoload"    : {
     "psr-4": {
-      "Popcorn\\": "framework/src/",
-      "App\\"    : "app/app/"
+      "Popcorn\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": [
-        "app/tests/",
-        "framework/tests/"
-      ]
+      "Tests\\": "tests/"
     },
     "files": [
     ]

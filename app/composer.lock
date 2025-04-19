@@ -1,0 +1,77 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "44de7ae868f14e26f1f9ff61cd3d7d74",
+    "packages": [
+        {
+            "name": "ollieread/popcorn-framework",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../framework",
+                "reference": "5308fd75f29aeda7e82d388a1c324e4748732c7f"
+            },
+            "require": {
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "infection/infection": "^0.29.14",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.1",
+                "vlucas/phpdotenv": "^5.6"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Popcorn\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                },
+                "files": []
+            },
+            "scripts": {
+                "test": [
+                    "@php vendor/bin/phpunit"
+                ],
+                "analyse": [
+                    "@php vendor/bin/phpstan analyse --memory-limit=2G --verbose --ansi"
+                ],
+                "dev": [
+                    "@php -S localhost:8000 -t public"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ollie Read",
+                    "email": "code@ollieread.com"
+                }
+            ],
+            "description": "A macro-framework for PHP — a \"just-enough\" framework that gives you structure, clarity, and flexibility without the bloat.",
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "ollieread/popcorn-framework": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^8.4"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}

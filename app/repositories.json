@@ -1,0 +1,8 @@
+{
+  "repositories": {
+    "framework": {
+      "type": "path",
+      "url" : "../framework"
+    }
+  }
+}

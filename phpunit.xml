@@ -15,13 +15,17 @@
         testdox="true"
 >
     <testsuites>
-        <testsuite name="Popcorn Testsuite">
-            <directory>./tests</directory>
+        <testsuite name="Popcorn Framework Testsuite">
+            <directory>./framework/tests</directory>
+        </testsuite>
+        <testsuite name="Popcorn App Testsuite">
+            <directory>./app/tests</directory>
         </testsuite>
     </testsuites>
     <source>
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">./framework/src</directory>
+            <directory suffix=".php">./app/app</directory>
         </include>
     </source>
     <coverage>
