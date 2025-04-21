@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Popcorn\DI;
+namespace Popcorn\DI\_Pre;
 
 use Popcorn\DI\Attributes\NoAutowiring;
 use RuntimeException;

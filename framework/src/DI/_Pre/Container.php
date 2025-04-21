@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace Popcorn\DI;
+namespace Popcorn\DI\_Pre;
 
-use use Closure;
+use Closure;
+use Popcorn\DI\_Pre\Contracts\ServiceContainer;
+use Popcorn\DI\_Pre\Contracts\ServiceResolver;
+use Popcorn\DI\_Pre\Resolvers\StandardResolver;
 use Popcorn\DI\Attributes\NoAutowiring;
 use Popcorn\DI\Attributes\NotShared;
-use Popcorn\DI\Contracts\ServiceContainer;
-use Popcorn\DI\Contracts\ServiceResolver;
-use Popcorn\DI\Resolvers\StandardResolver;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
-use ReflectionMethod;use ReflectionParameter;
+use ReflectionMethod;
+use ReflectionParameter;
 use RuntimeException;
 
 final class Container implements ServiceContainer
@@ -22,7 +23,7 @@ final class Container implements ServiceContainer
     /**
      * The current context stack.
      *
-     * @var \Popcorn\DI\ContextStack
+     * @var \Popcorn\DI\_Pre\ContextStack
      */
     private ContextStack $context;
 
@@ -36,28 +37,28 @@ final class Container implements ServiceContainer
     /**
      * The default resolver to use if no others are applicable.
      *
-     * @var \Popcorn\DI\Contracts\ServiceResolver
+     * @var \Popcorn\DI\_Pre\Contracts\ServiceResolver
      */
     private ServiceResolver $defaultResolver;
 
     /**
      * Resolver mapping of attributes to handler.
      *
-     * @var array<class-string, class-string<\Popcorn\DI\Contracts\ServiceResolver>>
+     * @var array<class-string, class-string<\Popcorn\DI\_Pre\Contracts\ServiceResolver>>
      */
     private array $resolverMapping;
 
     /**
      * Resolver instances mapped to their class.
      *
-     * @var array<class-string<\Popcorn\DI\Contracts\ServiceResolver>, \Popcorn\DI\Contracts\ServiceResolver>
+     * @var array<class-string<\Popcorn\DI\_Pre\Contracts\ServiceResolver>, \Popcorn\DI\_Pre\Contracts\ServiceResolver>
      */
     private array $resolvers = [];
 
     /**
      * Factory instances mapped to their class.
      *
-     * @var array<class-string, \Popcorn\DI\Contracts\ServiceFactory>
+     * @var array<class-string, \Popcorn\DI\_Pre\Contracts\ServiceFactory>
      */
     private array $factories;
 
@@ -92,11 +93,11 @@ final class Container implements ServiceContainer
     private array $resolutionStack = [];
 
     /**
-     * @param array<class-string, class-string>                                        $aliases
-     * @param array<class-string, class-string<\Popcorn\DI\Contracts\ServiceResolver>> $resolvers
-     * @param array<class-string, \Popcorn\DI\Contracts\ServiceFactory>                $factories
-     * @param \Popcorn\DI\ContextStack|null                                            $context
-     * @param \Popcorn\DI\Contracts\ServiceResolver|null                               $defaultResolver
+     * @param array<class-string, class-string>                                             $aliases
+     * @param array<class-string, class-string<\Popcorn\DI\_Pre\Contracts\ServiceResolver>> $resolvers
+     * @param array<class-string, \Popcorn\DI\_Pre\Contracts\ServiceFactory>                $factories
+     * @param \Popcorn\DI\_Pre\ContextStack|null                                            $context
+     * @param \Popcorn\DI\_Pre\Contracts\ServiceResolver|null                               $defaultResolver
      */
     public function __construct(
         array            $aliases = [],
@@ -238,6 +239,8 @@ final class Container implements ServiceContainer
         } catch (ReflectionException $e) {
             throw new RuntimeException(sprintf('Method %s not found in class %s', $method, $class), 0, $e);
         }
+
+        return null;
     }
 
     private function shouldBeShared(string $class): bool
@@ -387,13 +390,13 @@ final class Container implements ServiceContainer
     /**
      * Get the service resolver instance.
      *
-     * @template TResolver of \Popcorn\DI\Contracts\ServiceResolver
+     * @template TResolver of \Popcorn\DI\_Pre\Contracts\ServiceResolver
      *
      * @param class-string<TResolver> $class
      *
-     * @return \Popcorn\DI\Contracts\ServiceResolver
+     * @return \Popcorn\DI\_Pre\Contracts\ServiceResolver
      *
-     * @phpstan-return TResolver
+     * @phpstan-return ServiceResolver
      *
      * @throws \ReflectionException
      */
@@ -403,7 +406,7 @@ final class Container implements ServiceContainer
             $this->resolvers[$class] = $this->resolve($class);
         }
 
-        /** @var TResolver */
+        /** @var ServiceResolver */
         return $this->resolvers[$class];
     }
 

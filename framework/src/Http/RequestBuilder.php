@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Popcorn\Http;
 
-use Popcorn\Http\Contracts\RequestContextRegistry;
 use RuntimeException;
 
 final class RequestBuilder
@@ -11,11 +10,6 @@ final class RequestBuilder
     private bool $useSuperGlobals = false;
 
     private RequestMethod $method;
-
-    /**
-     * @var callable(\Popcorn\Http\RequestContextStack): void
-     */
-    private $contextCallback;
 
     public function useSuperGlobals(): self
     {
@@ -38,23 +32,10 @@ final class RequestBuilder
         return $this;
     }
 
-    /**
-     * @param callable(\Popcorn\Http\RequestContextStack): void $callback
-     *
-     * @return self
-     */
-    public function withContext(callable $callback): self
-    {
-        $this->contextCallback = $callback;
-
-        return $this;
-    }
-
     public function build(): Contracts\Request
     {
         return new Request(
-            method : $this->getMethod(),
-            context: $this->getRequestContext()
+            method: $this->getMethod()
         );
     }
 
@@ -70,16 +51,5 @@ final class RequestBuilder
         }
 
         throw new RuntimeException('Request method is not set.');
-    }
-
-    private function getRequestContext(): RequestContextRegistry
-    {
-        $context = new RequestContextStack();
-
-        if ($this->contextCallback !== null) {
-            ($this->contextCallback)($context);
-        }
-
-        return $context;
     }
 }

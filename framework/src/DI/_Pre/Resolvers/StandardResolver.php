@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Popcorn\DI\Resolvers;
+namespace Popcorn\DI\_Pre\Resolvers;
 
-use Popcorn\DI\Contracts\ServiceContainer;
-use Popcorn\DI\Contracts\ServiceResolver;
+use Popcorn\DI\_Pre\Contracts\ServiceContainer;
+use Popcorn\DI\_Pre\Contracts\ServiceResolver;
 use ReflectionNamedType;
 use ReflectionParameter;
 use RuntimeException;
@@ -14,8 +14,8 @@ final class StandardResolver implements ServiceResolver
     /**
      * Resolve a parameter.
      *
-     * @param \Popcorn\DI\Contracts\ServiceContainer $container
-     * @param \ReflectionParameter                   $parameter
+     * @param \Popcorn\DI\_Pre\Contracts\ServiceContainer $container
+     * @param \ReflectionParameter                        $parameter
      *
      * @return mixed
      */

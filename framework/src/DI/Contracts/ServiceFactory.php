@@ -8,13 +8,13 @@ namespace Popcorn\DI\Contracts;
 interface ServiceFactory
 {
     /**
-     * Make a service instance.
+     * Create a service instance.
      *
      * @param \Popcorn\DI\Contracts\ServiceContainer $container
      *
-     * @return object
+     * @return object|null
      *
-     * @phpstan-return TService
+     * @phpstan-return TService|null
      */
-    public function make(ServiceContainer $container): object;
+    public function make(ServiceContainer $container): ?object;
 }

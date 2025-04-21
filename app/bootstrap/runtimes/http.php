@@ -9,5 +9,4 @@ return new HttpRuntime()
         new RequestBuilder()
             ->useSuperGlobals()
             ->build()
-    )
-    ->boot();
+    );

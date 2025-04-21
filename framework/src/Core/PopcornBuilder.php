@@ -4,19 +4,16 @@ declare(strict_types=1);
 namespace Popcorn\Core;
 
 use Popcorn\Core\Bootstrappers\EnvLoader;
+use Popcorn\Core\Bootstrappers\LoadAndConfigureServiceContainer;
 use Popcorn\Core\Bootstrappers\LoadConfigObjectsFromFiles;
-use Popcorn\Core\Bootstrappers\PopulateEnvVarsFromEnvPhp;
-use Popcorn\Core\Bootstrappers\RegisterCurrentContextStack;
-use Popcorn\Core\Contracts\Runtime;
 use Popcorn\DI\Contracts\ServiceContainer;
-use RuntimeException;
 
 final class PopcornBuilder
 {
     /**
      * The service container loader.
      *
-     * @var (callable(): \Popcorn\DI\Contracts\ServiceContainer)|null
+     * @var (callable(\Popcorn\Core\Popcorn): ?\Popcorn\DI\Contracts\ServiceContainer)|null
      */
     private $containerLoader;
 
@@ -26,20 +23,6 @@ final class PopcornBuilder
      * @var \Popcorn\DI\Contracts\ServiceContainer|null
      */
     private ?ServiceContainer $container = null;
-
-    /**
-     * The runtime loader.
-     *
-     * @var callable|null
-     */
-    private $runtimeLoader;
-
-    /**
-     * The runtime instance.
-     *
-     * @var \Popcorn\Core\Contracts\Runtime|null
-     */
-    private ?Runtime $runtime = null;
 
     /**
      * The bootstrappers to configure the application.
@@ -63,6 +46,15 @@ final class PopcornBuilder
     private string $envFilePath;
 
     /**
+     * Service providers to construct the container.
+     *
+     * @var list<class-string<\Popcorn\DI\Contracts\ServiceProvider>>
+     */
+    private array $providers = [];
+
+    private(set) ?string $cachePath = null;
+
+    /**
      * Using the given service container instance.
      *
      * @param \Popcorn\DI\Contracts\ServiceContainer $container
@@ -80,7 +72,7 @@ final class PopcornBuilder
     /**
      * Use the given loader to resolve the service container.
      *
-     * @param callable(): \Popcorn\DI\Contracts\ServiceContainer $loader
+     * @param callable(\Popcorn\Core\Popcorn): ?\Popcorn\DI\Contracts\ServiceContainer $loader
      *
      * @return self
      */
@@ -88,36 +80,6 @@ final class PopcornBuilder
     {
         $this->container       = null;
         $this->containerLoader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Use the given runtime instance.
-     *
-     * @param \Popcorn\Core\Contracts\Runtime $runtime
-     *
-     * @return self
-     */
-    public function withRuntime(Runtime $runtime): self
-    {
-        $this->runtimeLoader = null;
-        $this->runtime       = $runtime;
-
-        return $this;
-    }
-
-    /**
-     * Use the given loader to resolve the runtime.
-     *
-     * @param callable $loader
-     *
-     * @return self
-     */
-    public function loadRuntimeUsing(callable $loader): self
-    {
-        $this->runtime       = null;
-        $this->runtimeLoader = $loader;
 
         return $this;
     }
@@ -134,20 +96,6 @@ final class PopcornBuilder
         $this->bootstrappers = $bootstrappers;
 
         return $this;
-    }
-
-    /**
-     * Use the default set of bootstrappers.
-     *
-     * @return self
-     */
-    public function useDefaultBootstrappers(): self
-    {
-        return $this->usingBootstrappers([
-            PopulateEnvVarsFromEnvPhp::class,
-            LoadConfigObjectsFromFiles::class,
-            RegisterCurrentContextStack::class,
-        ]);
     }
 
     /**
@@ -176,6 +124,37 @@ final class PopcornBuilder
         return $this;
     }
 
+    /**
+     * @param list<class-string<\Popcorn\DI\Contracts\ServiceProvider>> $providers
+     * @param bool                                                      $overwrite
+     *
+     * @return $this
+     */
+    public function usingProviders(array $providers, bool $overwrite = false): self
+    {
+        if ($overwrite) {
+            $this->providers = $providers;
+        } else {
+            $this->providers = array_merge($this->providers, $providers);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the cache directory.
+     *
+     * @param string $cacheDir
+     *
+     * @return self
+     */
+    public function useCacheIn(string $cacheDir): self
+    {
+        $this->cachePath = $cacheDir;
+
+        return $this;
+    }
+
     public function build(): Popcorn
     {
         // Make sure the env file path is set.
@@ -184,14 +163,10 @@ final class PopcornBuilder
         // Make sure the config map is set.
         $this->setConfigMap();
 
-        // Get the container.
-        $container = $this->getContainer();
+        // Make sure the container loader is set.
+        $this->setContainerLoader();
 
-        return new Popcorn(
-            $container,
-            $this->getRuntime($container),
-            $this->bootstrappers,
-        );
+        return new Popcorn($this->bootstrappers, $this->cachePath);
     }
 
     private function setEnvFilePath(): void
@@ -213,34 +188,15 @@ final class PopcornBuilder
         }
 
         // Set the config map on the base class.
-        LoadConfigObjectsFromFiles::setConfigMap($this->configMap);;
+        LoadConfigObjectsFromFiles::setConfigMap($this->configMap);
     }
 
-    private function getContainer(): ServiceContainer
+    private function setContainerLoader(): void
     {
-        if ($this->containerLoader !== null) {
-            $this->container = ($this->containerLoader)();
+        if ($this->containerLoader === null) {
+            return;
         }
 
-        if ($this->container === null) {
-            throw new RuntimeException('No container has been set.');
-        }
-
-        return $this->container;
-    }
-
-    private function getRuntime(ServiceContainer $container): Runtime
-    {
-        if ($this->runtimeLoader !== null) {
-            $runtime = ($this->runtimeLoader)($container);
-            /** @var \Popcorn\Core\Contracts\Runtime $runtime */
-            $this->runtime = $runtime;
-        }
-
-        if ($this->runtime === null) {
-            throw new RuntimeException('No runtime has been set.');
-        }
-
-        return $this->runtime;
+        LoadAndConfigureServiceContainer::setLoader($this->containerLoader);
     }
 }

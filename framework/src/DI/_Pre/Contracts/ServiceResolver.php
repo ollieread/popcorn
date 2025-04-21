@@ -1,6 +1,6 @@
 <?php
 
-namespace Popcorn\DI\Contracts;
+namespace Popcorn\DI\_Pre\Contracts;
 
 use ReflectionParameter;
 
@@ -9,8 +9,8 @@ interface ServiceResolver
     /**
      * Resolve a parameter.
      *
-     * @param \Popcorn\DI\Contracts\ServiceContainer $container
-     * @param \ReflectionParameter                   $parameter
+     * @param \Popcorn\DI\_Pre\Contracts\ServiceContainer $container
+     * @param \ReflectionParameter                        $parameter
      *
      * @return mixed
      */

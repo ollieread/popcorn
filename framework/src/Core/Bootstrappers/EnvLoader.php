@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use Popcorn\Core\Contracts\Bootstrapper;
 use Popcorn\Core\EnvVars;
 use Popcorn\Core\Popcorn;
-use Popcorn\DI\ContextStack;
 
 /**
  * ENV Loader
@@ -32,16 +31,6 @@ abstract class EnvLoader implements Bootstrapper
     }
 
     /**
-     * @var \Popcorn\DI\ContextStack
-     */
-    private ContextStack $stack;
-
-    public function __construct(ContextStack $stack)
-    {
-        $this->stack = $stack;
-    }
-
-    /**
      * Perform the bootstrapping.
      *
      * This method is called during the application boot phase.
@@ -56,7 +45,8 @@ abstract class EnvLoader implements Bootstrapper
 
         /** @var array<string, mixed> $variables */
 
-        $this->stack->set(EnvVars::class, new EnvVars($variables));
+        // Set the instance of the container.
+        $popcorn->container->instance(new EnvVars($variables), EnvVars::class, true);
     }
 
     /**

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Popcorn\Http;
 
 use Popcorn\Core\Contracts\Runtime;
+use Popcorn\DI\_Pre\ContextStack;
+use Popcorn\DI\_Pre\Contracts\ServiceContainer;
 use Popcorn\DI\Attributes\NoAutowiring;
 use Popcorn\DI\Attributes\NotShared;
-use Popcorn\DI\ContextStack;
-use Popcorn\DI\Contracts\ServiceContainer;
 use Popcorn\Http\Contracts\Request;
 use Popcorn\Http\Contracts\RequestContextRegistry;
 use RuntimeException;
@@ -23,7 +23,7 @@ final class HttpRuntime implements Runtime
     /**
      * Set the service container for use in the runtime.
      *
-     * @param \Popcorn\DI\Contracts\ServiceContainer $container
+     * @param \Popcorn\DI\_Pre\Contracts\ServiceContainer $container
      *
      * @return static
      */

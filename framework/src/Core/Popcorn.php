@@ -18,7 +18,7 @@ final class Popcorn
      *
      * @var \Popcorn\DI\Contracts\ServiceContainer
      */
-    private(set) ServiceContainer $services;
+    private(set) ServiceContainer $container;
 
     /**
      * The current instances runtime.
@@ -33,20 +33,39 @@ final class Popcorn
     private(set) array $bootstrappers;
 
     /**
-     * @param \Popcorn\DI\Contracts\ServiceContainer                   $services
-     * @param \Popcorn\Core\Contracts\Runtime                          $runtime
+     * The filepath for the cached files.
+     *
+     * @var string|null
+     */
+    private(set) ?string $cachePath = null;
+
+    /**
      * @param list<class-string<\Popcorn\Core\Contracts\Bootstrapper>> $bootstrappers
+     * @param string|null                                              $cachePath
      */
     public function __construct(
-        ServiceContainer $services,
-        Runtime          $runtime,
-        array            $bootstrappers
+        array   $bootstrappers,
+        ?string $cachePath = null,
     )
     {
-        $this->services      = $services;
-        $this->runtime       = $runtime;
         $this->bootstrappers = $bootstrappers;
+        $this->cachePath     = $cachePath;
     }
+
+    public function setRuntime(Runtime $runtime): self
+    {
+        $this->runtime = $runtime;
+
+        return $this;
+    }
+
+    public function setServiceContainer(ServiceContainer $container): self
+    {
+        $this->container = $container;
+
+        return $this;
+    }
+
 
     /**
      * Boot the application.
@@ -55,11 +74,11 @@ final class Popcorn
      */
     public function boot(): void
     {
-        // Set the service container on the runtime.
-        $this->runtime->setServiceContainer($this->services);
-
         // Perform the bootstrapping of the core components.
         $this->bootstrap();
+
+        // Make sure the runtime is booted.
+        $this->runtime->boot();
     }
 
     /**
@@ -73,7 +92,7 @@ final class Popcorn
         foreach ($this->bootstrappers as $bootstrapper) {
             // Get them from the container and bootstrap them.
             // We don't care about the instance, they're throw-away objects.
-            $this->services->get($bootstrapper)->bootstrap($this);
+            $this->container->get($bootstrapper)->bootstrap($this);
         }
     }
 

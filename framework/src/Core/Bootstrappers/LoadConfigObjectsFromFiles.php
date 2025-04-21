@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Popcorn\Core\Bootstrappers;
 
-use RuntimeException;
 use Popcorn\Core\Contracts\Bootstrapper;
 use Popcorn\Core\EnvVars;
 use Popcorn\Core\Popcorn;
-use Popcorn\DI\ContextStack;
+use Popcorn\DI\_Pre\ContextStack;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -39,7 +39,7 @@ final class LoadConfigObjectsFromFiles implements Bootstrapper
     }
 
     /**
-     * @var \Popcorn\DI\ContextStack
+     * @var \Popcorn\DI\_Pre\ContextStack
      */
     private ContextStack $stack;
 
