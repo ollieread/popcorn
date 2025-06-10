@@ -1,47 +1,34 @@
 {
-  "name"        : "ollieread/popcorn",
-  "description" : "A macro-framework for PHP — a \"just-enough\" framework that gives you structure, clarity, and flexibility without the bloat.",
-  "type"        : "project",
-  "require"     : {
-    "php": "^8.4"
+  "name"       : "ollieread/popcorn",
+  "description": "A macro-framework for PHP — a \"just-enough\" framework that gives you structure, clarity, and flexibility without the bloat.",
+  "type"       : "project",
+  "require"    : {
+    "php"       : "^8.4",
+    "popcorn/di": "*@dev"
   },
-  "require-dev" : {
+  "require-dev": {
     "phpunit/phpunit"    : "^12.1",
     "infection/infection": "^0.29.14",
-    "phpstan/phpstan"    : "^2.1",
-    "vlucas/phpdotenv"   : "^5.6"
+    "phpstan/phpstan"    : "^2.1"
   },
-  "license"     : "MIT",
-  "autoload"    : {
-    "psr-4": {
-      "Popcorn\\": "framework/src/",
-      "App\\"    : "app/app/"
-    }
+  "replace"    : {
+    "popcorn/di": "self.version"
   },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": [
-        "app/tests/",
-        "framework/tests/"
-      ]
-    },
-    "files": [
-    ]
-  },
-  "bin"         : [
+  "license"    : "MIT",
+  "bin"        : [
   ],
-  "authors"     : [
+  "authors"    : [
     {
       "name" : "Ollie Read",
       "email": "code@ollieread.com"
     }
   ],
-  "config"      : {
+  "config"     : {
     "allow-plugins": {
       "infection/extension-installer": true
     }
   },
-  "scripts"     : {
+  "scripts"    : {
     "test"   : [
       "@php vendor/bin/phpunit"
     ],

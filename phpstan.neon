@@ -1,10 +1,9 @@
-includes: []
+includes:
+  - src/di/phpstan.neon
 
 parameters:
   level: max
 
-  paths:
-    - app/app
-    - framework/src
+  paths: []
 
   ignoreErrors:

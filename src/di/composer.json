@@ -1,0 +1,49 @@
+{
+  "name"        : "popcorn/di",
+  "description" : "The dependency injection container for the Popcorn framework",
+  "type"        : "project",
+  "require"     : {
+    "php": "^8.4"
+  },
+  "require-dev" : {
+    "phpunit/phpunit"    : "^12.1",
+    "infection/infection": "^0.29.14",
+    "phpstan/phpstan"    : "^2.1"
+  },
+  "license"     : "MIT",
+  "autoload"    : {
+    "psr-4": {
+      "Pocorn\\DI\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pocorn\\DI\\Tests\\": [
+        "tests/"
+      ]
+    },
+    "files": [
+    ]
+  },
+  "bin"         : [
+  ],
+  "authors"     : [
+    {
+      "name" : "Ollie Read",
+      "email": "code@ollieread.com"
+    }
+  ],
+  "config"      : {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
+  },
+  "scripts"     : {
+    "test"   : [
+      "@php vendor/bin/phpunit"
+    ],
+    "analyse": [
+      "@php vendor/bin/phpstan analyse --memory-limit=2G --verbose --ansi"
+    ]
+  }
+}
