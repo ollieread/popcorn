@@ -6,7 +6,6 @@ namespace Popcorn\Core\Bootstrappers;
 use Popcorn\Core\Contracts\Bootstrapper;
 use Popcorn\Core\EnvVars;
 use Popcorn\Core\Popcorn;
-use Popcorn\DI\_Pre\ContextStack;
 use RuntimeException;
 use Throwable;
 
@@ -39,16 +38,6 @@ final class LoadConfigObjectsFromFiles implements Bootstrapper
     }
 
     /**
-     * @var \Popcorn\DI\_Pre\ContextStack
-     */
-    private ContextStack $stack;
-
-    public function __construct(ContextStack $stack)
-    {
-        $this->stack = $stack;
-    }
-
-    /**
      * Perform the bootstrapping.
      *
      * This method is called during the application boot phase.
@@ -64,12 +53,12 @@ final class LoadConfigObjectsFromFiles implements Bootstrapper
     {
         // We need to make sure this variable is available here, as the
         // config files can use it.
-        $env = $this->stack->get(EnvVars::class);
+        $env = $popcorn->container->get(EnvVars::class);
 
         // Create the config loader so that the config file only has access
         // to the env and its own file path.
         /** @phpstan-ignore closure.unusedUse */
-        $configLoader = static function(string $filePath) use($env) {
+        $configLoader = static function (string $filePath) use ($env) {
             return require $filePath;
         };
 
@@ -90,7 +79,7 @@ final class LoadConfigObjectsFromFiles implements Bootstrapper
                 }
 
                 // If we're here, it's all gone swimmingly, so we can set it.
-                $this->stack->set($class, $config);
+                $popcorn->container->instance($config, $class);
             } catch (Throwable $throwable) {
                 throw new RuntimeException('Error loading config file: ' . $filePath, 0, $throwable);
             }

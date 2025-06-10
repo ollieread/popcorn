@@ -77,6 +77,9 @@ final class Popcorn
         // Perform the bootstrapping of the core components.
         $this->bootstrap();
 
+        // Make sure the runtime is aware of the popcorn instance.
+        $this->runtime->setPopcorn($this);
+
         // Make sure the runtime is booted.
         $this->runtime->boot();
     }
@@ -92,7 +95,7 @@ final class Popcorn
         foreach ($this->bootstrappers as $bootstrapper) {
             // Get them from the container and bootstrap them.
             // We don't care about the instance, they're throw-away objects.
-            $this->container->get($bootstrapper)->bootstrap($this);
+            new $bootstrapper()->bootstrap($this);
         }
     }
 
@@ -103,9 +106,6 @@ final class Popcorn
      */
     public function run(): void
     {
-        // Boot the application.
-        $this->boot();
-
         // Run the runtime, which could do any number of other things.
         $this->runtime->run();
     }

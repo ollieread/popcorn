@@ -9,15 +9,16 @@ use Popcorn\Http\HttpServiceProvider;
 
 return Popcorn::builder()
               ->useCacheIn(__DIR__ . '/cache')
+              ->loadEnvFrom(dirname(__DIR__) . '/.env.php')
               ->usingBootstrappers([
+                  // Load the service container and configure it by collecting
+                  // services using the service collector and service providers.
+                  Bootstrappers\LoadAndConfigureServiceContainer::class,
                   // Load the environment variables from a '.env.php' file.
                   Bootstrappers\PopulateEnvVarsFromEnvPhp::class,
                   // Load the config objects from the map provided below
                   // in the 'loadConfigFrom()' method.
                   Bootstrappers\LoadConfigObjectsFromFiles::class,
-                  // Load the service container and configure it by collecting
-                  // services using the service collector and service providers.
-                  Bootstrappers\LoadAndConfigureServiceContainer::class,
               ])
               ->loadConfigFrom([
                   AppConfig::class => dirname(__DIR__) . '/config/app.php',

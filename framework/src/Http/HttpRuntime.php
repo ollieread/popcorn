@@ -5,34 +5,43 @@ declare(strict_types=1);
 namespace Popcorn\Http;
 
 use Popcorn\Core\Contracts\Runtime;
-use Popcorn\DI\_Pre\ContextStack;
-use Popcorn\DI\_Pre\Contracts\ServiceContainer;
+use Popcorn\Core\Popcorn;
 use Popcorn\DI\Attributes\NoAutowiring;
 use Popcorn\DI\Attributes\NotShared;
 use Popcorn\Http\Contracts\Request;
-use Popcorn\Http\Contracts\RequestContextRegistry;
+use Popcorn\Http\Contracts\Router;
 use RuntimeException;
 
 #[NotShared, NoAutowiring]
 final class HttpRuntime implements Runtime
 {
-    private(set) ServiceContainer $container;
+    private(set) Popcorn $popcorn;
+
+    private(set) Router $router;
 
     private(set) Request $request;
 
     /**
-     * Set the service container for use in the runtime.
+     * Set the popcorn instance for use in the runtime.
      *
-     * @param \Popcorn\DI\_Pre\Contracts\ServiceContainer $container
+     * @param \Popcorn\Core\Popcorn $popcorn
      *
      * @return static
      */
-    public function setServiceContainer(ServiceContainer $container): static
+    public function setPopcorn(Popcorn $popcorn): static
     {
-        $this->container = $container;
+        $this->popcorn = $popcorn;
 
         return $this;
     }
+
+    public function setRouter(Router $router): self
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
 
     public function setRequest(Request $request): self
     {
@@ -43,12 +52,7 @@ final class HttpRuntime implements Runtime
 
     public function boot(): void
     {
-        $context = $this->container->get(ContextStack::class);
-
-        // Register the request object, and the context registry with the context
-        // stack, so they can be easily injected.
-        $context->set(Request::class, $this->request);
-        $context->set(RequestContextRegistry::class, $this->request->contextRegistry());
+        // Nothing to boot.
     }
 
     /**
@@ -62,6 +66,6 @@ final class HttpRuntime implements Runtime
             throw new RuntimeException('Request is not set.');
         }
 
-        var_dump('Hi from the HTTP runtime');
+        dd($this->request);
     }
 }

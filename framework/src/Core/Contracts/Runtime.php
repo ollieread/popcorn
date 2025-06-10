@@ -2,18 +2,19 @@
 
 namespace Popcorn\Core\Contracts;
 
-use Popcorn\DI\_Pre\Contracts\ServiceContainer;
+use Popcorn\Core\Popcorn;
+use Popcorn\DI\Contracts\ServiceContainer;
 
 interface Runtime
 {
     /**
-     * Set the service container for use in the runtime.
+     * Set the popcorn instance for use in the runtime.
      *
-     * @param \Popcorn\DI\_Pre\Contracts\ServiceContainer $container
+     * @param \Popcorn\Core\Popcorn $popcorn
      *
      * @return static
      */
-    public function setServiceContainer(ServiceContainer $container): static;
+    public function setPopcorn(Popcorn $popcorn): static;
 
     /**
      * Boot the runtime.
